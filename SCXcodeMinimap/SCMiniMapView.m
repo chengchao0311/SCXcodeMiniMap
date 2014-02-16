@@ -296,7 +296,9 @@ static NSString * const DVTFontAndColorSourceTextSettingsChangedNotification = @
         point = NSMakePoint(locationInSelf.x / textSize.width, locationInSelf.y / textSize.height);
     }
     else {
-        point = NSMakePoint(locationInSelf.x / textSize.width, locationInSelf.y / frameSize.height);
+        float clickedCharacterIndex = (float)[self.textView characterIndexForPoint:theEvent.locationInWindow];
+        float clickedCharacterRelativePositionPoint = clickedCharacterIndex / (float)self.textView.textStorage.string.length;
+        point = NSMakePoint(locationInSelf.x / textSize.width, clickedCharacterRelativePositionPoint);
     }
     
     [self goAtRelativePosition:point];
