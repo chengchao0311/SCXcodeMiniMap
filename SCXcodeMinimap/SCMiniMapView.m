@@ -9,7 +9,7 @@
 #import "SCMiniMapView.h"
 #import "SCXcodeMinimap.h"
 
-const CGFloat kDefaultZoomLevel = 0.1f;
+const CGFloat kDefaultZoomLevel = 0.2f;
 static const CGFloat kDefaultShadowLevel = 0.1f;
 
 static NSString * const DVTFontAndColorSourceTextSettingsChangedNotification = @"DVTFontAndColorSourceTextSettingsChangedNotification";
@@ -289,17 +289,10 @@ static NSString * const DVTFontAndColorSourceTextSettingsChangedNotification = @
     NSPoint locationInSelf = [self convertPoint:theEvent.locationInWindow fromView:nil];
     
     NSSize textSize = [self.textView.layoutManager usedRectForTextContainer:self.textView.textContainer].size;
-    NSSize frameSize = self.frame.size;
-    
-    NSPoint point;
-    if (textSize.height < frameSize.height) {
-        point = NSMakePoint(locationInSelf.x / textSize.width, locationInSelf.y / textSize.height);
-    }
-    else {
-        float clickedCharacterIndex = (float)[self.textView characterIndexForPoint:theEvent.locationInWindow];
-        float clickedCharacterRelativePositionPoint = clickedCharacterIndex / (float)self.textView.textStorage.string.length;
-        point = NSMakePoint(locationInSelf.x / textSize.width, clickedCharacterRelativePositionPoint);
-    }
+
+    float clickedCharacterIndex = (float)[self.textView characterIndexForPoint:theEvent.locationInWindow];
+    float clickedCharacterRelativePositionPoint = clickedCharacterIndex / (float)self.textView.textStorage.string.length;
+    NSPoint point = NSMakePoint(locationInSelf.x / textSize.width, clickedCharacterRelativePositionPoint);
     
     [self goAtRelativePosition:point];
 }
